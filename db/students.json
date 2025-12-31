@@ -1,0 +1,75 @@
+{
+  "2311301167": {
+    "name": "Aman Verma",
+    "phone": "9876543210",
+    "branch": "Electrical Engineering",
+    "year": 2,
+    "course": "B.Tech",
+    "hostel": "H-3",
+    "room": "213"
+  },
+  "2311301182": {
+    "name": "Rohit Sharma",
+    "phone": "9123456780",
+    "branch": "Computer Science",
+    "year": 3,
+    "course": "B.Tech",
+    "hostel": "H-2",
+    "room": "118"
+  },
+  "2311301201": {
+    "name": "Kunal Singh",
+    "phone": "9988776655",
+    "branch": "Mechanical Engineering",
+    "year": 1,
+    "course": "B.Tech",
+    "hostel": "H-1",
+    "room": "034"
+  },
+  "2311301219": {
+    "name": "Aditya Jain",
+    "phone": "9090909090",
+    "branch": "Civil Engineering",
+    "year": 4,
+    "course": "B.Tech",
+    "hostel": "H-4",
+    "room": "402"
+  },
+  "2311301233": {
+    "name": "Nikhil Gupta",
+    "phone": "8887766554",
+    "branch": "Electronics Engineering",
+    "year": 2,
+    "course": "B.Tech",
+    "hostel": "H-3",
+    "room": "221"
+  },
+
+  "2311301248": {
+    "name": "Saurabh Mishra",
+    "phone": "9797979797",
+    "branch": "Electrical Engineering",
+    "year": 3,
+    "course": "B.Tech",
+    "hostel": "H-5",
+    "room": "109"
+  },
+  "2311301260": {
+    "name": "Yash Patel",
+    "phone": "9696969696",
+    "branch": "Computer Science",
+    "year": 1,
+    "course": "B.Tech",
+    "hostel": "H-1",
+    "room": "056"
+  },
+  "2311301274": {
+    "name": "Deepak Yadav",
+    "phone": "9898989898",
+    "branch": "Mechanical Engineering",
+    "year": 4,
+    "course": "B.Tech",
+    "hostel": "H-6",
+    "room": "310"
+  }
+}
