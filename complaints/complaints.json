@@ -20,6 +20,7 @@
         "complaint_text": "my room light is not working",
         "status": "OPEN"
     },
+
     {
         "complaint_id": "0b5fb6b5",
         "timestamp": "2025-12-31 18:27:05",
@@ -39,6 +40,29 @@
             "severity": null
         },
         "complaint_text": "my room roof is falling water",
+        "status": "OPEN"
+    },
+    
+    {
+        "complaint_id": "4b7640c8",
+        "timestamp": "2025-12-31 18:48:06",
+        "student": {
+            "scholar_no": "",
+            "name": "Aman Verma",
+            "branch": "Electrical Engineering",
+            "year": 2
+        },
+        "location": {
+            "hostel": "H-3",
+            "room": "213"
+        },
+        "department": "Hostel Maintenance",
+        "issue": {
+            "type": "water",
+            "severity": null
+        },
+        "priority": "HIGH",
+        "complaint_text": "my room has been filled with water",
         "status": "OPEN"
     }
 ]

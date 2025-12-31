@@ -39,8 +39,25 @@ def solve_hostel_issue(student, intent_data):
 
 
 def save_complaint(student, intent_data, raw_text):
-    print("[DEBUG] save_complaint() called")
+    priority = calculate_priority(intent_data)
 
+    os.makedirs(os.path.dirname(COMPLAINT_FILE), exist_ok=True)
+
+    if os.path.exists(COMPLAINT_FILE):
+        with open(COMPLAINT_FILE, "r", encoding="utf-8") as f:
+            try:
+                complaints = json.load(f)
+            except json.JSONDecodeError:
+                complaints = []
+    else:
+        complaints = []
+
+    # 🔁 DUPLICATE CHECK
+    duplicate = find_duplicate_complaint(student, intent_data, complaints)
+    if duplicate:
+        return duplicate["complaint_id"], True   # True = duplicate
+
+    # ✅ NEW COMPLAINT
     complaint = {
         "complaint_id": str(uuid.uuid4())[:8],
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -48,36 +65,56 @@ def save_complaint(student, intent_data, raw_text):
             "scholar_no": student.get("scholar_no", ""),
             "name": student["name"],
             "branch": student["branch"],
-            "year": student.get("year", ""),
+            "year": student.get("year", "")
         },
         "location": {
-            "hostel": student.get("hostel", ""),
-            "room": student.get("room", "")
+            "hostel": student.get("hostel"),
+            "room": student.get("room")
         },
         "department": "Hostel Maintenance",
         "issue": {
             "type": intent_data.get("issue_type"),
             "severity": intent_data.get("severity")
         },
+        "priority": priority,
         "complaint_text": raw_text,
         "status": "OPEN"
     }
 
-    os.makedirs(os.path.dirname(COMPLAINT_FILE), exist_ok=True)
-
-    if os.path.exists(COMPLAINT_FILE):
-        with open(COMPLAINT_FILE, "r", encoding="utf-8") as f:
-            try:
-                data = json.load(f)
-            except json.JSONDecodeError:
-                data = []
-    else:
-        data = []
-
-    data.append(complaint)
+    complaints.append(complaint)
 
     with open(COMPLAINT_FILE, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=4)
+        json.dump(complaints, f, indent=4)
 
-    print("[DEBUG] Complaint saved:", complaint["complaint_id"])
-    return complaint["complaint_id"]
+    return complaint["complaint_id"], False   # False = new complaint
+
+def calculate_priority(intent_data):
+    issue_type = intent_data.get("issue_type")
+    severity = intent_data.get("severity")
+
+    if issue_type == "water":
+        return "HIGH"
+
+    if issue_type == "light" and severity == "not_working":
+        return "HIGH"
+
+    if issue_type == "fan" and severity == "not_working":
+        return "MEDIUM"
+
+    if severity == "fluctuating":
+        return "LOW"
+
+    return "MEDIUM"
+
+
+def find_duplicate_complaint(student, intent_data, complaints):
+    for c in complaints:
+        if (
+            c["status"] == "OPEN"
+            and c["location"]["hostel"] == student.get("hostel")
+            and c["location"]["room"] == student.get("room")
+            and c["issue"]["type"] == intent_data.get("issue_type")
+        ):
+            return c
+    return None
+

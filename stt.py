@@ -1,7 +1,3 @@
-# stt.py
-# Robust Whisper STT tuned for Indian Hinglish / Hindi / Urdu
-# Reduces hallucinations & mixed-script garbage
-
 import whisper
 import sounddevice as sd
 from scipy.io.wavfile import write
@@ -9,10 +5,9 @@ import numpy as np
 import re
 
 SAMPLE_RATE = 16000
-DURATION = 11  # longer window helps Indian speech
+DURATION = 9  # seconds (important for numbers)
 
 model = whisper.load_model("base")
-
 
 def speech_to_text():
     print("\n🎤 Listening... Speak now")
@@ -27,41 +22,10 @@ def speech_to_text():
 
     write("audio/input.wav", SAMPLE_RATE, recording)
 
-    result = model.transcribe(
-        "audio/input.wav",
-        # 🔥 KEY FIXES
-        language=None,                   # auto-detect (CRITICAL)
-        temperature=0.0,                 # stop hallucination
-        beam_size=5,
-        best_of=5,
-        condition_on_previous_text=False,
-        initial_prompt=(
-            "Indian student speaking Hindi, Hinglish or Urdu "
-            "about hostel room problems like light, fan, water."
-        )
-    )
-
+    result = model.transcribe("audio/input.wav", language="hi")
     text = result["text"].strip()
-    text = normalize_text(text)
 
     print("📝 Heard:", text)
-    return text
-
-
-def normalize_text(text: str) -> str:
-    """
-    Remove garbage tokens & keep Indian scripts
-    """
-    text = text.lower()
-
-    # keep English + Hindi + Urdu
-    text = re.sub(
-        r"[^\w\s\u0900-\u097F\u0600-\u06FF]",
-        " ",
-        text
-    )
-
-    text = re.sub(r"\s+", " ", text).strip()
     return text
 
 

@@ -85,23 +85,31 @@ issue_text = speech_to_text()
 intent_data = detect_intent(issue_text)
 print("[System] Detected intent:", intent_data)
 
-# ✅ CORRECT CHECK
+
 if intent_data.get("intent") == "hostel":
 
     response = solve_hostel_issue(student, intent_data)
 
     if response:
-        complaint_id = save_complaint(
+        complaint_id, is_duplicate = save_complaint(
             student=student,
             intent_data=intent_data,
             raw_text=issue_text
         )
 
-        speak(
-            f"{student['name']}, aapki hostel complaint register kar li gayi hai. "
-            f"Complaint ID {complaint_id} hai. "
-            "Isse 24 se 48 ghante ke andar resolve kar diya jayega."
-        )
+        if is_duplicate:
+            speak(
+                f"{student['name']}, is room ke liye pehle se complaint register hai. "
+                f"Complaint ID {complaint_id} hai. "
+                "Maintenance team isse already dekh rahi hai."
+            )
+        else:
+            speak(
+                f"{student['name']}, aapki hostel complaint register kar li gayi hai. "
+                f"Complaint ID {complaint_id} hai. "
+                "Isse 24 se 48 ghante ke andar resolve kar diya jayega."
+            )
+
     else:
         speak(
             "Aapki complaint note kar li gayi hai. "
